@@ -1,67 +1,31 @@
-import React, { useEffect, useState } from "react";
-import "./App.css";
-
-import Dashboard from "./components/Dashboard";
-import AddProblem from "./components/AddProblem";
-import AddVolunteer from "./components/AddVolunteer";
-import ProblemList from "./components/ProblemList";
-import Prediction from "./components/Prediction";
-import MapView from "./components/MapView";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import DashboardPage from './pages/DashboardPage';
+import AddProblemPage from './pages/AddProblemPage';
+import AddVolunteerPage from './pages/AddVolunteerPage';
+import ProblemsPage from './pages/ProblemsPage';
+import PredictionPage from './pages/PredictionPage';
+import MapPage from './pages/MapPage';
+import './App.css';
 
 function App() {
-  const [problems, setProblems] = useState([]);
-  const [volunteers, setVolunteers] = useState([]);
-  const [route, setRoute] = useState([]);
-
-  // 🔥 Fetch data
-  const fetchData = async () => {
-    try {
-      const p = await fetch("http://localhost:5000/api/problem").then(res => res.json());
-      const v = await fetch("http://localhost:5000/api/volunteer").then(res => res.json());
-
-      setProblems(p);
-      setVolunteers(v);
-
-    } catch (err) {
-      console.log("Fetch error:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   return (
-    <div className="container">
-      <h1>🚀 AI Crisis Management System</h1>
-
-      <Dashboard />
-
-      {/* ➕ Add */}
-      <AddProblem onAdd={fetchData} />
-      <AddVolunteer onAdd={fetchData} />
-
-      {/* 🔥 MATCH + ROUTE */}
-      <ProblemList 
-        onMatch={(routeData) => {
-          console.log("ROUTE RECEIVED:", routeData);
-          setRoute(routeData || []);
-        }}
-      />
-
-      <Prediction />
-
-      {/* 🗺 MAP */}
-      <div className="map-section">
-        <h2>🗺 Crisis Map</h2>
-
-        <MapView
-          problems={problems}
-          volunteers={volunteers}
-          route={route}
-        />
+    <Router>
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/add-problem" element={<AddProblemPage />} />
+          <Route path="/add-volunteer" element={<AddVolunteerPage />} />
+          <Route path="/problems" element={<ProblemsPage />} />
+          <Route path="/prediction" element={<PredictionPage />} />
+          <Route path="/map" element={<MapPage />} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 

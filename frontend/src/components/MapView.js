@@ -51,7 +51,7 @@ const FitBounds = ({ route }) => {
     if (route.length > 0) {
       map.fitBounds(route, { padding: [50, 50] });
     }
-  }, []);
+  }, [map, route]);
 
   return null;
 };
@@ -144,7 +144,7 @@ const MapView = ({ problems = [], volunteers = [], route = [], onComplete }) => 
 
     return () => cancelAnimationFrame(animationRef.current);
 
-  }, [normalizedRoute]);
+  }, [normalizedRoute, onComplete]);
 
   return (
     <MapContainer
@@ -167,7 +167,7 @@ const MapView = ({ problems = [], volunteers = [], route = [], onComplete }) => 
                 ]}
             icon={problemIcon}
           >
-            <Popup>🚨 {p.title}<br />📍 {p.location}</Popup>
+            <Popup>{p.title}<br />Location: {p.location}</Popup>
           </Marker>
         );
       })}
@@ -185,7 +185,7 @@ const MapView = ({ problems = [], volunteers = [], route = [], onComplete }) => 
                 ]}
             icon={volunteerIcon}
           >
-            <Popup>👤 {v.name}<br />⭐ {v.rating}</Popup>
+            <Popup>{v.name}<br />Rating: {v.rating}</Popup>
           </Marker>
         );
       })}

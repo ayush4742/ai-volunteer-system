@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const AddProblem = () => {
+const AddProblem = ({ onAdd }) => {
   const [data, setData] = useState({
     title: "",
     location: "",
@@ -10,15 +10,93 @@ const AddProblem = () => {
 
   const handleAdd = async () => {
     await axios.post("http://localhost:5000/api/problem/add", data);
-    alert("Problem Added");
+    alert("Problem Added Successfully!");
+    setData({ title: "", location: "", priority: "high" });
+    if (onAdd) onAdd();
   };
 
   return (
-    <div className="card">
-      <h2>🚨 Add Problem</h2>
-      <input placeholder="Title" onChange={e => setData({...data, title: e.target.value})}/>
-      <input placeholder="Location" onChange={e => setData({...data, location: e.target.value})}/>
-      <button onClick={handleAdd}>Add</button>
+    <div>
+      <div style={{ marginBottom: '20px' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#1B5E20' }}>
+          Problem Title
+        </label>
+        <input
+          type="text"
+          placeholder="e.g., Food shortage in Delhi"
+          value={data.title}
+          onChange={e => setData({...data, title: e.target.value})}
+          style={{
+            width: '100%',
+            padding: '12px',
+            fontSize: '16px',
+            border: '2px solid #ddd',
+            borderRadius: '8px',
+            marginBottom: '15px',
+            fontFamily: 'Times New Roman, serif'
+          }}
+        />
+      </div>
+      <div style={{ marginBottom: '20px' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#1B5E20' }}>
+          Location
+        </label>
+        <input
+          type="text"
+          placeholder="e.g., Delhi, India"
+          value={data.location}
+          onChange={e => setData({...data, location: e.target.value})}
+          style={{
+            width: '100%',
+            padding: '12px',
+            fontSize: '16px',
+            border: '2px solid #ddd',
+            borderRadius: '8px',
+            marginBottom: '15px',
+            fontFamily: 'Times New Roman, serif'
+          }}
+        />
+      </div>
+      <div style={{ marginBottom: '30px' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#1B5E20' }}>
+          Priority
+        </label>
+        <select
+          value={data.priority}
+          onChange={e => setData({...data, priority: e.target.value})}
+          style={{
+            width: '100%',
+            padding: '12px',
+            fontSize: '16px',
+            border: '2px solid #ddd',
+            borderRadius: '8px',
+            fontFamily: 'Times New Roman, serif'
+          }}
+        >
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+      <button
+        onClick={handleAdd}
+        style={{
+          backgroundColor: '#4CAF50',
+          color: 'white',
+          padding: '15px 30px',
+          fontSize: '18px',
+          border: 'none',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          width: '100%',
+          fontFamily: 'Times New Roman, serif',
+          transition: 'background-color 0.3s'
+        }}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#45a049'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#4CAF50'}
+      >
+        Report Problem
+      </button>
     </div>
   );
 };
