@@ -9,6 +9,14 @@ body {
   padding: 20px;
 }
 
+.map-section {
+  margin-top: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
 h1 {
   text-align: center;
   color: #333;
@@ -49,3 +57,4 @@ input {
   align-items: center;
   padding: 8px 0;
 }
+
