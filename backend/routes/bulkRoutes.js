@@ -1,45 +1,27 @@
-const axios = require("axios");
+const express = require("express");
+const router = express.Router();
 
-const getCoordinates = async (location) => {
-  try {
-    const res = await axios.get(
-      "https://nominatim.openstreetmap.org/search",
-      {
-        params: { q: location, format: "json", limit: 1 },
-        headers: { "User-Agent": "ai-volunteer-system" }
-      }
-    );
+const Volunteer = require("../models/Volunteer");
+const Problem = require("../models/Problem");
 
-    if (!res.data.length) return null;
-
-    return {
-      latitude: parseFloat(res.data[0].lat),
-      longitude: parseFloat(res.data[0].lon)
-    };
-  } catch (e) {
-    return null;
-  }
-};
-
+// BULK ADD volunteers
 router.post("/volunteers", async (req, res) => {
   try {
-    const updated = await Promise.all(
-      req.body.map(async (v) => {
-        const coords = await getCoordinates(v.location);
-
-        return {
-          ...v,
-          latitude: coords?.latitude,
-          longitude: coords?.longitude
-        };
-      })
-    );
-
-    const volunteers = await Volunteer.insertMany(updated);
-
+    const volunteers = await Volunteer.insertMany(req.body);
     res.json({ message: "Bulk volunteers added", volunteers });
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
+
+// BULK ADD problems
+router.post("/problems", async (req, res) => {
+  try {
+    const problems = await Problem.insertMany(req.body);
+    res.json({ message: "Bulk problems added", problems });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+module.exports = router;
