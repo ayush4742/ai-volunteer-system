@@ -1,34 +1,45 @@
-const express = require("express");
-const router = express.Router();
-const Volunteer = require("../models/Volunteer");
-const Problem = require("../models/Problem");
+const axios = require("axios");
 
-// BULK ADD volunteers
+const getCoordinates = async (location) => {
+  try {
+    const res = await axios.get(
+      "https://nominatim.openstreetmap.org/search",
+      {
+        params: { q: location, format: "json", limit: 1 },
+        headers: { "User-Agent": "ai-volunteer-system" }
+      }
+    );
+
+    if (!res.data.length) return null;
+
+    return {
+      latitude: parseFloat(res.data[0].lat),
+      longitude: parseFloat(res.data[0].lon)
+    };
+  } catch (e) {
+    return null;
+  }
+};
+
 router.post("/volunteers", async (req, res) => {
   try {
-    if (!Array.isArray(req.body)) {
-      return res.status(400).json({ message: "Expected an array" });
-    }
+    const updated = await Promise.all(
+      req.body.map(async (v) => {
+        const coords = await getCoordinates(v.location);
 
-    const volunteers = await Volunteer.insertMany(req.body);
+        return {
+          ...v,
+          latitude: coords?.latitude,
+          longitude: coords?.longitude
+        };
+      })
+    );
+
+    const volunteers = await Volunteer.insertMany(updated);
+
     res.json({ message: "Bulk volunteers added", volunteers });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
-
-// BULK ADD problems
-router.post("/problems", async (req, res) => {
-  try {
-    if (!Array.isArray(req.body)) {
-      return res.status(400).json({ message: "Expected an array" });
-    }
-
-    const problems = await Problem.insertMany(req.body);
-    res.json({ message: "Bulk problems added", problems });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-module.exports = router;
