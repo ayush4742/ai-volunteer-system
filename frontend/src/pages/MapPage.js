@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom'; // 🔥 NEW
 import MapView from '../components/MapView';
 
 const MapPage = () => {
   const [problems, setProblems] = useState([]);
   const [volunteers, setVolunteers] = useState([]);
-  const [route] = useState([]);
+
+  const location = useLocation(); // 🔥 NEW
+
+  // 🔥 GET ROUTE FROM NAVIGATION
+  const route = location.state?.route || [];
 
   const fetchData = async () => {
     try {
@@ -45,7 +50,7 @@ const MapPage = () => {
           <MapView
             problems={problems}
             volunteers={volunteers}
-            route={route}
+            route={route} // 🔥 NOW WORKS
           />
         </div>
       </div>

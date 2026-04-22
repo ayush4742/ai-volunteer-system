@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // 🔥 NEW
 
 const ProblemList = ({ onMatch, solvedProblemId }) => {
   const [problems, setProblems] = useState([]);
   const [result, setResult] = useState(null);
   const [loadingId, setLoadingId] = useState(null);
   const [tracking, setTracking] = useState(false);
+
+  const navigate = useNavigate(); // 🔥 NEW
 
   // 🔹 Fetch problems
   useEffect(() => {
@@ -28,12 +31,17 @@ const ProblemList = ({ onMatch, solvedProblemId }) => {
 
       setResult(res.data);
 
-      // 🔥 send route to map
+      // 🔥 route send to App
       if (onMatch) {
         onMatch(res.data.route || []);
       }
 
       setTracking(true);
+
+      // 🔥 REDIRECT TO MAP PAGE
+    navigate("/map", {
+      state: { route: res.data.route || [] }
+    });  
 
     } catch (err) {
       console.error("MATCH ERROR:", err.response?.data || err.message);
