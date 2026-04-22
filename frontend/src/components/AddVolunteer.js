@@ -23,7 +23,7 @@ const AddVolunteer = ({ onAdd }) => {
   return (
     <div>
       <div style={{ marginBottom: '20px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#1B5E20' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#064E3B' }}>
           Full Name
         </label>
         <input
@@ -43,7 +43,7 @@ const AddVolunteer = ({ onAdd }) => {
         />
       </div>
       <div style={{ marginBottom: '20px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#1B5E20' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#064E3B' }}>
           Skills (comma-separated)
         </label>
         <input
@@ -63,7 +63,7 @@ const AddVolunteer = ({ onAdd }) => {
         />
       </div>
       <div style={{ marginBottom: '20px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#1B5E20' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#064E3B' }}>
           Location
         </label>
         <input
@@ -83,7 +83,7 @@ const AddVolunteer = ({ onAdd }) => {
         />
       </div>
       <div style={{ marginBottom: '20px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#1B5E20' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#064E3B' }}>
           Rating (1-5)
         </label>
         <input
@@ -104,7 +104,7 @@ const AddVolunteer = ({ onAdd }) => {
         />
       </div>
       <div style={{ marginBottom: '30px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#1B5E20' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#064E3B' }}>
           Available
         </label>
         <input
@@ -117,7 +117,7 @@ const AddVolunteer = ({ onAdd }) => {
       <button
         onClick={handleAdd}
         style={{
-          backgroundColor: '#1B5E20',
+          backgroundColor: '#064E3B',
           color: 'white',
           padding: '15px 30px',
           fontSize: '18px',
@@ -128,8 +128,8 @@ const AddVolunteer = ({ onAdd }) => {
           fontFamily: 'Times New Roman, serif',
           transition: 'background-color 0.3s'
         }}
-        onMouseOver={(e) => e.target.style.backgroundColor = '#0d4a1a'}
-        onMouseOut={(e) => e.target.style.backgroundColor = '#1B5E20'}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#042f24'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#064E3B'}
       >
         Join as Volunteer
       </button>

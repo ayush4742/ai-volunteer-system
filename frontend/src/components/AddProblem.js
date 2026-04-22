@@ -18,7 +18,7 @@ const AddProblem = ({ onAdd }) => {
   return (
     <div>
       <div style={{ marginBottom: '20px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#1B5E20' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#064E3B' }}>
           Problem Title
         </label>
         <input
@@ -38,7 +38,7 @@ const AddProblem = ({ onAdd }) => {
         />
       </div>
       <div style={{ marginBottom: '20px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#1B5E20' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#064E3B' }}>
           Location
         </label>
         <input
@@ -58,7 +58,7 @@ const AddProblem = ({ onAdd }) => {
         />
       </div>
       <div style={{ marginBottom: '30px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#1B5E20' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontSize: '18px', color: '#064E3B' }}>
           Priority
         </label>
         <select
@@ -81,7 +81,7 @@ const AddProblem = ({ onAdd }) => {
       <button
         onClick={handleAdd}
         style={{
-          backgroundColor: '#4CAF50',
+          backgroundColor: '#0F766E',
           color: 'white',
           padding: '15px 30px',
           fontSize: '18px',
@@ -92,8 +92,8 @@ const AddProblem = ({ onAdd }) => {
           fontFamily: 'Times New Roman, serif',
           transition: 'background-color 0.3s'
         }}
-        onMouseOver={(e) => e.target.style.backgroundColor = '#45a049'}
-        onMouseOut={(e) => e.target.style.backgroundColor = '#4CAF50'}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#0d5a4f'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#0F766E'}
       >
         Report Problem
       </button>

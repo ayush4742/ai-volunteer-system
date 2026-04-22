@@ -53,7 +53,7 @@ const ProblemList = ({ onMatch, solvedProblemId }) => {
 
   return (
     <div>
-      <h2 style={{ color: '#1B5E20', marginBottom: '20px' }}>Active Problems</h2>
+      <h2 style={{ color: '#064E3B', marginBottom: '20px' }}>Active Problems</h2>
 
       {problems.map((p) => (
         <div key={p._id} style={{
@@ -67,7 +67,7 @@ const ProblemList = ({ onMatch, solvedProblemId }) => {
           alignItems: 'center'
         }}>
           <div>
-            <h3 style={{ margin: '0 0 5px 0', color: '#1B5E20' }}>{p.title}</h3>
+            <h3 style={{ margin: '0 0 5px 0', color: '#064E3B' }}>{p.title}</h3>
             <p style={{ margin: 0, color: '#666' }}>📍 {p.location}</p>
           </div>
 
@@ -75,7 +75,7 @@ const ProblemList = ({ onMatch, solvedProblemId }) => {
             onClick={() => handleMatch(p._id)}
             disabled={loadingId === p._id || solvedProblemId === p._id}
             style={{
-              backgroundColor: solvedProblemId === p._id ? '#4CAF50' : '#1B5E20',
+              backgroundColor: solvedProblemId === p._id ? '#0F766E' : '#064E3B',
               color: 'white',
               padding: '10px 20px',
               border: 'none',
@@ -102,7 +102,7 @@ const ProblemList = ({ onMatch, solvedProblemId }) => {
           borderRadius: "12px",
           boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
         }}>
-          <h3 style={{ color: '#1B5E20', marginBottom: '20px' }}>Match Result</h3>
+          <h3 style={{ color: '#064E3B', marginBottom: '20px' }}>Match Result</h3>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
             <div>
@@ -112,7 +112,7 @@ const ProblemList = ({ onMatch, solvedProblemId }) => {
               <p><b>Priority:</b> {result.priority}</p>
             </div>
             <div>
-              <h4 style={{ color: '#4CAF50', marginBottom: '10px' }}>Assigned Volunteer</h4>
+              <h4 style={{ color: '#0F766E', marginBottom: '10px' }}>Assigned Volunteer</h4>
               <p><b>Name:</b> {result.assignedVolunteer}</p>
               <p><b>Skills:</b> {result.volunteerSkills?.join(", ")}</p>
               <p><b>Rating:</b> ⭐ {result.volunteerRating}</p>
@@ -120,7 +120,7 @@ const ProblemList = ({ onMatch, solvedProblemId }) => {
           </div>
 
           <div style={{ marginBottom: '20px' }}>
-            <h4 style={{ color: '#1B5E20', marginBottom: '10px' }}>Match Score: {result.score}/10</h4>
+            <h4 style={{ color: '#064E3B', marginBottom: '10px' }}>Match Score: {result.score}/10</h4>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '10px' }}>
               <p><b>Skill Match:</b> {result.breakdown.skill}</p>
               <p><b>Location Match:</b> {result.breakdown.location}</p>
@@ -131,7 +131,7 @@ const ProblemList = ({ onMatch, solvedProblemId }) => {
           </div>
 
           <div style={{ marginBottom: '20px' }}>
-            <h4 style={{ color: '#1B5E20', marginBottom: '10px' }}>🗺️ Route Information</h4>
+            <h4 style={{ color: '#064E3B', marginBottom: '10px' }}>🗺️ Route Information</h4>
             <p><b>Distance:</b> {result.distance}</p>
             <p><b>Estimated Time:</b> {result.eta}</p>
           </div>
