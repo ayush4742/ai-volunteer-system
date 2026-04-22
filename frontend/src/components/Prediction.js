@@ -24,7 +24,7 @@ const Prediction = () => {
         onClick={handlePredict}
         disabled={loading}
         style={{
-          backgroundColor: '#1B5E20',
+          backgroundColor: '#064E3B',
           color: 'white',
           padding: '15px 30px',
           fontSize: '18px',
@@ -35,8 +35,8 @@ const Prediction = () => {
           fontFamily: 'Times New Roman, serif',
           transition: 'background-color 0.3s'
         }}
-        onMouseOver={(e) => !loading && (e.target.style.backgroundColor = '#0d4a1a')}
-        onMouseOut={(e) => !loading && (e.target.style.backgroundColor = '#1B5E20')}
+        onMouseOver={(e) => !loading && (e.target.style.backgroundColor = '#042f24')}
+        onMouseOut={(e) => !loading && (e.target.style.backgroundColor = '#064E3B')}
       >
         {loading ? "Analyzing..." : "Get Crisis Predictions"}
       </button>

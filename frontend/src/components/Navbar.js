@@ -16,7 +16,7 @@ const Navbar = () => {
 
   return (
     <nav style={{
-      backgroundColor: '#1B5E20',
+      backgroundColor: '#064E3B',
       padding: '10px 20px',
       position: 'sticky',
       top: 0,
@@ -50,12 +50,12 @@ const Navbar = () => {
                 padding: '8px 16px',
                 borderRadius: '4px',
                 transition: 'background-color 0.3s',
-                backgroundColor: location.pathname === item.path ? '#4CAF50' : 'transparent',
+                backgroundColor: location.pathname === item.path ? '#5EEAD4' : 'transparent',
                 fontFamily: 'Times New Roman, serif'
               }}
               onMouseOver={(e) => {
                 if (location.pathname !== item.path) {
-                  e.target.style.backgroundColor = '#4CAF50';
+                  e.target.style.backgroundColor = '#0F766E';
                 }
               }}
               onMouseOut={(e) => {

@@ -26,7 +26,7 @@ const DashboardPage = () => {
     { name: 'Busy', value: data.totalVolunteers - data.availableVolunteers }
   ];
 
-  const COLORS = ['#4CAF50', '#FF5722'];
+  const COLORS = ['#0F766E', '#FF5722'];
 
   return (
     <>
@@ -47,57 +47,265 @@ const DashboardPage = () => {
       </div>
 
       <div className="page-content">
-        <div className="page-card">
-          <div className="section-grid section-grid-2">
-            <div style={{ textAlign: 'center' }}>
-              <h3 style={{ color: '#1B5E20', marginBottom: '10px' }}>Total Volunteers</h3>
-              <p style={{ fontSize: '3rem', fontWeight: '700' }}>{data.totalVolunteers}</p>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <h3 style={{ color: '#1B5E20', marginBottom: '10px' }}>Total Problems</h3>
-              <p style={{ fontSize: '3rem', fontWeight: '700' }}>{data.totalProblems}</p>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <h3 style={{ color: '#1B5E20', marginBottom: '10px' }}>Available Volunteers</h3>
-              <p style={{ fontSize: '3rem', fontWeight: '700', color: '#4CAF50' }}>{data.availableVolunteers}</p>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <h3 style={{ color: data.highPriorityProblems > 0 ? '#F44336' : '#1B5E20', marginBottom: '10px' }}>High Priority</h3>
-              <p style={{ fontSize: '3rem', fontWeight: '700', color: data.highPriorityProblems > 0 ? '#F44336' : '#111825' }}>{data.highPriorityProblems}</p>
-            </div>
+        {/* Summary Cards Section */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '24px',
+          marginBottom: '48px'
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '32px 24px',
+            borderRadius: '16px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+            textAlign: 'center',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'default'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
+          }}>
+            <h3 style={{
+              color: '#064E3B',
+              marginBottom: '16px',
+              fontSize: '1.1rem',
+              fontWeight: '600',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>Total Volunteers</h3>
+            <p style={{
+              fontSize: '3.5rem',
+              fontWeight: '800',
+              color: '#064E3B',
+              margin: '0',
+              lineHeight: '1'
+            }}>{data.totalVolunteers}</p>
+          </div>
+
+          <div style={{
+            backgroundColor: 'white',
+            padding: '32px 24px',
+            borderRadius: '16px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+            textAlign: 'center',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'default'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
+          }}>
+            <h3 style={{
+              color: '#064E3B',
+              marginBottom: '16px',
+              fontSize: '1.1rem',
+              fontWeight: '600',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>Total Problems</h3>
+            <p style={{
+              fontSize: '3.5rem',
+              fontWeight: '800',
+              color: '#064E3B',
+              margin: '0',
+              lineHeight: '1'
+            }}>{data.totalProblems}</p>
+          </div>
+
+          <div style={{
+            backgroundColor: 'white',
+            padding: '32px 24px',
+            borderRadius: '16px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+            textAlign: 'center',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'default'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
+          }}>
+            <h3 style={{
+              color: '#064E3B',
+              marginBottom: '16px',
+              fontSize: '1.1rem',
+              fontWeight: '600',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>Available Volunteers</h3>
+            <p style={{
+              fontSize: '3.5rem',
+              fontWeight: '800',
+              color: '#0F766E',
+              margin: '0',
+              lineHeight: '1'
+            }}>{data.availableVolunteers}</p>
+          </div>
+
+          <div style={{
+            backgroundColor: data.highPriorityProblems > 0 ? '#FFEBEE' : 'white',
+            padding: '32px 24px',
+            borderRadius: '16px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+            textAlign: 'center',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'default',
+            border: data.highPriorityProblems > 0 ? '2px solid #F44336' : 'none'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
+          }}>
+            <h3 style={{
+              color: data.highPriorityProblems > 0 ? '#F44336' : '#064E3B',
+              marginBottom: '16px',
+              fontSize: '1.1rem',
+              fontWeight: '600',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>High Priority Problems</h3>
+            <p style={{
+              fontSize: '3.5rem',
+              fontWeight: '800',
+              color: data.highPriorityProblems > 0 ? '#F44336' : '#064E3B',
+              margin: '0',
+              lineHeight: '1'
+            }}>{data.highPriorityProblems}</p>
           </div>
         </div>
 
-        <div className="section-grid section-grid-2 page-section">
-          <div className="page-card">
-            <h2 className="page-title">Comparison Analysis</h2>
-            <BarChart width={520} height={320} data={barData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="value" fill="#4CAF50" />
-            </BarChart>
+        {/* Charts Section */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))',
+          gap: '32px'
+        }}>
+          {/* Bar Chart Section */}
+          <div style={{
+            backgroundColor: 'white',
+            padding: '32px',
+            borderRadius: '16px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
+          }}>
+            <h2 style={{
+              margin: '0 0 24px 0',
+              fontSize: '1.8rem',
+              fontWeight: '700',
+              color: '#064E3B',
+              textAlign: 'center'
+            }}>Comparison Analysis</h2>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '16px 0'
+            }}>
+              <BarChart width={480} height={320} data={barData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E8F5E8" />
+                <XAxis
+                  dataKey="name"
+                  tick={{ fontSize: 14, fill: '#064E3B' }}
+                  axisLine={{ stroke: '#064E3B' }}
+                />
+                <YAxis
+                  tick={{ fontSize: 14, fill: '#064E3B' }}
+                  axisLine={{ stroke: '#064E3B' }}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #E8F5E8',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                  }}
+                />
+                <Bar dataKey="value" fill="#0F766E" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </div>
           </div>
-          <div className="page-card">
-            <h2 className="page-title">Volunteer Distribution</h2>
-            <PieChart width={520} height={320}>
-              <Pie
-                data={pieData}
-                cx={260}
-                cy={160}
-                labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={100}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
+
+          {/* Pie Chart Section */}
+          <div style={{
+            backgroundColor: 'white',
+            padding: '32px',
+            borderRadius: '16px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
+          }}>
+            <h2 style={{
+              margin: '0 0 24px 0',
+              fontSize: '1.8rem',
+              fontWeight: '700',
+              color: '#064E3B',
+              textAlign: 'center'
+            }}>Volunteer Distribution</h2>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '16px 0'
+            }}>
+              <PieChart width={480} height={320}>
+                <Pie
+                  data={pieData}
+                  cx={240}
+                  cy={160}
+                  labelLine={false}
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  outerRadius={120}
+                  fill="#8884d8"
+                  dataKey="value"
+                  style={{ fontSize: '14px', fontWeight: '600' }}
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #E8F5E8',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                  }}
+                />
+              </PieChart>
+            </div>
           </div>
         </div>
       </div>
