@@ -1,60 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom'; // 🔥 NEW
-import MapView from '../components/MapView';
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import MapView from "../components/MapView";
 
 const MapPage = () => {
   const [problems, setProblems] = useState([]);
   const [volunteers, setVolunteers] = useState([]);
 
-  const location = useLocation(); // 🔥 NEW
-
-  // 🔥 GET ROUTE FROM NAVIGATION
+  const location = useLocation();
   const route = location.state?.route || [];
 
-  const fetchData = async () => {
-    try {
-      const p = await fetch("http://localhost:5000/api/problem").then(res => res.json());
-      const v = await fetch("http://localhost:5000/api/volunteer").then(res => res.json());
-
-      setProblems(p);
-      setVolunteers(v);
-    } catch (err) {
-      console.log("Fetch error:", err);
-    }
-  };
-
   useEffect(() => {
-    fetchData();
+    fetch("http://localhost:5000/api/problem")
+      .then(res => res.json())
+      .then(setProblems);
+
+    fetch("http://localhost:5000/api/volunteer")
+      .then(res => res.json())
+      .then(setVolunteers);
   }, []);
 
   return (
-    <>
-      <div
-        className="hero-banner"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1497493292307-31c376b6e479?auto=format&fit=crop&w=1600&q=80)',
-          minHeight: '280px'
-        }}
-      >
-        <div className="hero-content">
-          <p className="hero-tagline">Geospatial Response</p>
-          <h1 className="hero-title">Crisis Map</h1>
-          <p className="hero-subtitle">
-            Explore active problem locations and volunteer movement on a responsive map designed for clarity.
-          </p>
-        </div>
-      </div>
-
-      <div className="page-content">
-        <div className="page-card" style={{ padding: '20px' }}>
+    <div className="page-content">
+      <div className="page-card" style={{ padding: "20px" }}>
+        <div style={{ height: "500px" }}>
           <MapView
-            problems={problems}
-            volunteers={volunteers}
-            route={route} // 🔥 NOW WORKS
+            problems={problems || []}
+            volunteers={volunteers || []}
+            route={route}
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

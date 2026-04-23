@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import DashboardPage from './pages/DashboardPage';
+import DashboardPage from "./pages/DashboardPage";
 import AddProblemPage from './pages/AddProblemPage';
 import AddVolunteerPage from './pages/AddVolunteerPage';
 import ProblemsPage from './pages/ProblemsPage';

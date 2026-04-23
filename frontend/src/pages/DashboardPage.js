@@ -1,7 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell } from 'recharts';
+import React, { useEffect, useState } from "react";
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  PieChart, Pie, Cell, ResponsiveContainer
+} from "recharts";
+
+import MapView from "../components/MapView";
 
 const DashboardPage = () => {
+
   const [data, setData] = useState({
     totalVolunteers: 0,
     totalProblems: 0,
@@ -9,308 +15,253 @@ const DashboardPage = () => {
     highPriorityProblems: 0
   });
 
+  const [problems, setProblems] = useState([]);
+  const [volunteers, setVolunteers] = useState([]);
+  const [activities, setActivities] = useState([]);
+
+  // 🔥 TIME FORMAT
+  const getTimeAgo = (date) => {
+    const diff = Math.floor((new Date() - new Date(date)) / 60000);
+
+    if (diff < 1) return "Just now";
+    if (diff < 60) return `${diff} mins ago`;
+
+    const hours = Math.floor(diff / 60);
+    return `${hours} hrs ago`;
+  };
+
   useEffect(() => {
-    fetch('http://localhost:5000/api/dashboard')
-      .then(res => res.json())
-      .then(setData)
-      .catch(err => console.log('Dashboard fetch error:', err));
+  const interval = setInterval(() => {
+    setData(prev => ({
+      ...prev,
+      totalVolunteers: prev.totalVolunteers + Math.floor(Math.random() * 2),
+      totalProblems: prev.totalProblems + Math.floor(Math.random() * 2),
+      availableVolunteers: prev.availableVolunteers + Math.floor(Math.random() * 2),
+      highPriorityProblems: prev.highPriorityProblems + Math.floor(Math.random() * 1)
+    }));
+  }, 3000);
+
+  return () => clearInterval(interval);
+}, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dashboard = await fetch("http://localhost:5000/api/dashboard").then(res => res.json());
+        const p = await fetch("http://localhost:5000/api/problem").then(res => res.json());
+        const v = await fetch("http://localhost:5000/api/volunteer").then(res => res.json());
+
+        setData(dashboard);
+        setProblems(p);
+        setVolunteers(v);
+
+        // 🔥 ACTIVITY GENERATION
+        const problemActivities = p.map(item => ({
+          type: "problem",
+          text: `🚨 Problem reported: ${item.title}`,
+          time: getTimeAgo(item.createdAt || new Date())
+        }));
+
+        const volunteerActivities = v.map(item => ({
+          type: "volunteer",
+          text: `👤 New volunteer: ${item.name}`,
+          time: getTimeAgo(item.createdAt || new Date())
+        }));
+
+        setActivities([...problemActivities, ...volunteerActivities].slice(0, 10));
+
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const barData = [
-    { name: 'Volunteers', value: data.totalVolunteers },
-    { name: 'Problems', value: data.totalProblems }
+    { name: "Volunteers", value: data.totalVolunteers },
+    { name: "Problems", value: data.totalProblems }
   ];
 
   const pieData = [
-    { name: 'Available', value: data.availableVolunteers },
-    { name: 'Busy', value: data.totalVolunteers - data.availableVolunteers }
+    { name: "Available", value: data.availableVolunteers },
+    { name: "Busy", value: data.totalVolunteers - data.availableVolunteers }
   ];
 
-  const COLORS = ['#0F766E', '#FF5722'];
+  const COLORS = ["#0F766E", "#FF5722"];
 
   return (
-    <>
-      <div
-        className="hero-banner"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=80)',
-          minHeight: '340px'
-        }}
-      >
-        <div className="hero-content">
-          <p className="hero-tagline">Dashboard · Operations · Insight</p>
-          <h1 className="hero-title">Crisis Intelligence at a Glance</h1>
-          <p className="hero-subtitle">
-            Track volunteer deployment, problem severity, and availability trends with a clean analytics dashboard designed for fast decision-making.
-          </p>
-        </div>
+    <div className="dashboard-wrapper">
+
+      {/* 🔥 STATS */}
+      <div className="stats-row">
+        <StatCard title="Total Volunteers" value={data.totalVolunteers} />
+        <StatCard title="Total Problems" value={data.totalProblems} />
+        <StatCard title="Available Volunteers" value={data.availableVolunteers} />
+        <StatCard title="High Priority" value={data.highPriorityProblems} danger />
       </div>
 
-      <div className="page-content">
-        {/* Summary Cards Section */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '24px',
-          marginBottom: '48px'
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '32px 24px',
-            borderRadius: '16px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-            textAlign: 'center',
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-            cursor: 'default'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
-          }}>
-            <h3 style={{
-              color: '#064E3B',
-              marginBottom: '16px',
-              fontSize: '1.1rem',
-              fontWeight: '600',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}>Total Volunteers</h3>
-            <p style={{
-              fontSize: '3.5rem',
-              fontWeight: '800',
-              color: '#064E3B',
-              margin: '0',
-              lineHeight: '1'
-            }}>{data.totalVolunteers}</p>
-          </div>
+      {/* 🔥 CHARTS */}
+      <div className="charts-row">
 
-          <div style={{
-            backgroundColor: 'white',
-            padding: '32px 24px',
-            borderRadius: '16px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-            textAlign: 'center',
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-            cursor: 'default'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
-          }}>
-            <h3 style={{
-              color: '#064E3B',
-              marginBottom: '16px',
-              fontSize: '1.1rem',
-              fontWeight: '600',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}>Total Problems</h3>
-            <p style={{
-              fontSize: '3.5rem',
-              fontWeight: '800',
-              color: '#064E3B',
-              margin: '0',
-              lineHeight: '1'
-            }}>{data.totalProblems}</p>
-          </div>
+          {/* 🔥 PROBLEM ANALYSIS */}
+          <div className="card">
+            <div className="card-header">
+              <h3>Problem Analysis</h3>
+              <p>High vs Low priority insights</p>
+            </div>
 
-          <div style={{
-            backgroundColor: 'white',
-            padding: '32px 24px',
-            borderRadius: '16px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-            textAlign: 'center',
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-            cursor: 'default'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
-          }}>
-            <h3 style={{
-              color: '#064E3B',
-              marginBottom: '16px',
-              fontSize: '1.1rem',
-              fontWeight: '600',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}>Available Volunteers</h3>
-            <p style={{
-              fontSize: '3.5rem',
-              fontWeight: '800',
-              color: '#0F766E',
-              margin: '0',
-              lineHeight: '1'
-            }}>{data.availableVolunteers}</p>
-          </div>
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={[
+                { name: "Flood", high: 14, low: 10 },
+                { name: "Medical", high: 8, low: 10 },
+                { name: "Fire", high: 9, low: 3 },
+                { name: "Food", high: 5, low: 10 },
+                { name: "Shelter", high: 3, low: 6 },
+                { name: "Other", high: 2, low: 7 }
+              ]}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
 
-          <div style={{
-            backgroundColor: data.highPriorityProblems > 0 ? '#FFEBEE' : 'white',
-            padding: '32px 24px',
-            borderRadius: '16px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-            textAlign: 'center',
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-            cursor: 'default',
-            border: data.highPriorityProblems > 0 ? '2px solid #F44336' : 'none'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
-          }}>
-            <h3 style={{
-              color: data.highPriorityProblems > 0 ? '#F44336' : '#064E3B',
-              marginBottom: '16px',
-              fontSize: '1.1rem',
-              fontWeight: '600',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}>High Priority Problems</h3>
-            <p style={{
-              fontSize: '3.5rem',
-              fontWeight: '800',
-              color: data.highPriorityProblems > 0 ? '#F44336' : '#064E3B',
-              margin: '0',
-              lineHeight: '1'
-            }}>{data.highPriorityProblems}</p>
-          </div>
-        </div>
-
-        {/* Charts Section */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))',
-          gap: '32px'
-        }}>
-          {/* Bar Chart Section */}
-          <div style={{
-            backgroundColor: 'white',
-            padding: '32px',
-            borderRadius: '16px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
-          }}>
-            <h2 style={{
-              margin: '0 0 24px 0',
-              fontSize: '1.8rem',
-              fontWeight: '700',
-              color: '#064E3B',
-              textAlign: 'center'
-            }}>Comparison Analysis</h2>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '16px 0'
-            }}>
-              <BarChart width={480} height={320} data={barData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E8F5E8" />
-                <XAxis
-                  dataKey="name"
-                  tick={{ fontSize: 14, fill: '#064E3B' }}
-                  axisLine={{ stroke: '#064E3B' }}
-                />
-                <YAxis
-                  tick={{ fontSize: 14, fill: '#064E3B' }}
-                  axisLine={{ stroke: '#064E3B' }}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'white',
-                    border: '1px solid #E8F5E8',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                  }}
-                />
-                <Bar dataKey="value" fill="#0F766E" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="high" fill="#DC2626" radius={[6,6,0,0]} />
+                <Bar dataKey="low" fill="#065F46" radius={[6,6,0,0]} />
               </BarChart>
-            </div>
+            </ResponsiveContainer>
           </div>
 
-          {/* Pie Chart Section */}
-          <div style={{
-            backgroundColor: 'white',
-            padding: '32px',
-            borderRadius: '16px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
-          }}>
-            <h2 style={{
-              margin: '0 0 24px 0',
-              fontSize: '1.8rem',
-              fontWeight: '700',
-              color: '#064E3B',
-              textAlign: 'center'
-            }}>Volunteer Distribution</h2>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '16px 0'
-            }}>
-              <PieChart width={480} height={320}>
-                <Pie
-                  data={pieData}
-                  cx={240}
-                  cy={160}
-                  labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={120}
-                  fill="#8884d8"
-                  dataKey="value"
-                  style={{ fontSize: '14px', fontWeight: '600' }}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'white',
-                    border: '1px solid #E8F5E8',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                  }}
-                />
-              </PieChart>
+          {/* 🔥 VOLUNTEER STATUS */}
+          <div className="card">
+            <div className="card-header">
+              <h3>Volunteer Status</h3>
+              <p>Current deployment overview</p>
             </div>
+
+            <ResponsiveContainer width="100%" height={260}>
+              <PieChart>
+                <Pie
+                  data={[
+                    { name: "Available", value: data.availableVolunteers },
+                    { name: "On Mission", value: 8 },
+                    { name: "Standby", value: 5 }
+                  ]}
+                  innerRadius={60}
+                  outerRadius={90}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  <Cell fill="#22C55E" />
+                  <Cell fill="#3B82F6" />
+                  <Cell fill="#F59E0B" />
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
+
+        </div>
+
+      {/* 🔥 MAP */}
+      <div className="card map-box">
+        <h3>Crisis Map</h3>
+        <div style={{ height: "350px" }}>
+          <MapView
+            problems={problems}
+            volunteers={volunteers}
+            route={[]}
+          />
         </div>
       </div>
-    </>
+
+      {/* 🔥 LOWER */}
+      <div className="bottom-row">
+
+        {/* AVAILABLE VOLUNTEERS */}
+        <div className="card">
+          <h3>Available Volunteers</h3>
+
+          <div className="volunteer-grid">
+            {volunteers
+              .filter(v => v.availability === true)
+              .map((v) => (
+                <div key={v._id} className="volunteer-card">
+
+                  <div className="avatar">
+                    {v.name?.split(" ").map(n => n[0]).join("")}
+                  </div>
+
+                  <div>
+                    <h4>{v.name}</h4>
+                    <p>{v.skills?.[0]}</p>
+                    <small>📍 {v.location}</small>
+                  </div>
+
+                </div>
+              ))}
+          </div>
+        </div>
+
+        {/* RECENT ACTIVITY */}
+        <div className="card">
+          <h3>Recent Activity</h3>
+
+          <div className="activity-list">
+             {activities.slice(0, 6).map((a, i) => (
+              <div key={i} className="activity-item">
+
+                <div className={`activity-icon ${a.type}`}>
+                  {a.type === "volunteer" ? "👤" : "🚨"}
+                </div>
+
+                <div>
+                  <p>{a.text}</p>
+                  <small>{a.time}</small>
+                </div>
+
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+
+      {/* 🔥 PROBLEMS */}
+      <div className="card">
+  <h3>Recent Problems</h3>
+
+  <div className="problem-grid">
+    {problems// 🔥 limit 6
+      .map((p) => (
+        <div key={p._id} className="problem-card">
+
+          {/* icon */}
+          <div className="problem-icon">
+            🚨
+          </div>
+
+          {/* info */}
+          <div>
+            <h4>{p.title}</h4>
+            <p>{p.priority}</p>
+            <small>📍 {p.location}</small>
+          </div>
+
+        </div>
+      ))}
+  </div>
+</div>
+
+    </div>
   );
 };
+
+/* 🔥 STAT CARD */
+const StatCard = ({ title, value, danger }) => (
+  <div className={`stat-box ${danger ? "danger" : ""}`}>
+    <p>{title}</p>
+    <h2>{value}</h2>
+  </div>
+);
 
 export default DashboardPage;
