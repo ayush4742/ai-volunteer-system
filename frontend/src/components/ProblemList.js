@@ -40,8 +40,11 @@ const ProblemList = ({ onMatch, solvedProblemId }) => {
 
       // 🔥 REDIRECT TO MAP PAGE
     navigate("/map", {
-      state: { route: res.data.route || [] }
-    });  
+      state: {
+        route: res.data.route || [],
+        result: res.data   // 🔥 IMPORTANT
+      }
+    }); 
 
     } catch (err) {
       console.error("MATCH ERROR:", err.response?.data || err.message);
