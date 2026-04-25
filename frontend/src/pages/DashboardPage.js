@@ -19,30 +19,29 @@ const DashboardPage = () => {
   const [volunteers, setVolunteers] = useState([]);
   const [activities, setActivities] = useState([]);
 
-  // 🔥 TIME FORMAT
   const getTimeAgo = (date) => {
     const diff = Math.floor((new Date() - new Date(date)) / 60000);
 
     if (diff < 1) return "Just now";
-    if (diff < 60) return `${diff} mins ago`;
+    if (diff < 60) return ${diff} mins ago;
 
     const hours = Math.floor(diff / 60);
-    return `${hours} hrs ago`;
+    return ${hours} hrs ago;
   };
 
   useEffect(() => {
-  const interval = setInterval(() => {
-    setData(prev => ({
-      ...prev,
-      totalVolunteers: prev.totalVolunteers + Math.floor(Math.random() * 2),
-      totalProblems: prev.totalProblems + Math.floor(Math.random() * 2),
-      availableVolunteers: prev.availableVolunteers + Math.floor(Math.random() * 2),
-      highPriorityProblems: prev.highPriorityProblems + Math.floor(Math.random() * 1)
-    }));
-  }, 3000);
+    const interval = setInterval(() => {
+      setData(prev => ({
+        ...prev,
+        totalVolunteers: prev.totalVolunteers + Math.floor(Math.random() * 2),
+        totalProblems: prev.totalProblems + Math.floor(Math.random() * 2),
+        availableVolunteers: prev.availableVolunteers + Math.floor(Math.random() * 2),
+        highPriorityProblems: prev.highPriorityProblems + Math.floor(Math.random() * 1)
+      }));
+    }, 3000);
 
-  return () => clearInterval(interval);
-}, []);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,16 +54,15 @@ const DashboardPage = () => {
         setProblems(p);
         setVolunteers(v);
 
-        // 🔥 ACTIVITY GENERATION
         const problemActivities = p.map(item => ({
           type: "problem",
-          text: `🚨 Problem reported: ${item.title}`,
+          text: 🚨 Problem reported: ${item.title},
           time: getTimeAgo(item.createdAt || new Date())
         }));
 
         const volunteerActivities = v.map(item => ({
           type: "volunteer",
-          text: `👤 New volunteer: ${item.name}`,
+          text: 👤 New volunteer: ${item.name},
           time: getTimeAgo(item.createdAt || new Date())
         }));
 
@@ -78,6 +76,7 @@ const DashboardPage = () => {
     fetchData();
   }, []);
 
+  // ✅ NOW USED
   const barData = [
     { name: "Volunteers", value: data.totalVolunteers },
     { name: "Problems", value: data.totalProblems }
@@ -93,7 +92,6 @@ const DashboardPage = () => {
   return (
     <div className="dashboard-wrapper">
 
-      {/* 🔥 STATS */}
       <div className="stats-row">
         <StatCard title="Total Volunteers" value={data.totalVolunteers} />
         <StatCard title="Total Problems" value={data.totalProblems} />
@@ -101,68 +99,53 @@ const DashboardPage = () => {
         <StatCard title="High Priority" value={data.highPriorityProblems} danger />
       </div>
 
-      {/* 🔥 CHARTS */}
       <div className="charts-row">
 
-          {/* 🔥 PROBLEM ANALYSIS */}
-          <div className="card">
-            <div className="card-header">
-              <h3>Problem Analysis</h3>
-              <p>High vs Low priority insights</p>
-            </div>
-
-            <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={[
-                { name: "Flood", high: 14, low: 10 },
-                { name: "Medical", high: 8, low: 10 },
-                { name: "Fire", high: 9, low: 3 },
-                { name: "Food", high: 5, low: 10 },
-                { name: "Shelter", high: 3, low: 6 },
-                { name: "Other", high: 2, low: 7 }
-              ]}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-
-                <Bar dataKey="high" fill="#DC2626" radius={[6,6,0,0]} />
-                <Bar dataKey="low" fill="#065F46" radius={[6,6,0,0]} />
-              </BarChart>
-            </ResponsiveContainer>
+        {/* 🔥 FIXED BAR CHART */}
+        <div className="card">
+          <div className="card-header">
+            <h3>Problem Analysis</h3>
+            <p>High vs Low priority insights</p>
           </div>
 
-          {/* 🔥 VOLUNTEER STATUS */}
-          <div className="card">
-            <div className="card-header">
-              <h3>Volunteer Status</h3>
-              <p>Current deployment overview</p>
-            </div>
-
-            <ResponsiveContainer width="100%" height={260}>
-              <PieChart>
-                <Pie
-                  data={[
-                    { name: "Available", value: data.availableVolunteers },
-                    { name: "On Mission", value: 8 },
-                    { name: "Standby", value: 5 }
-                  ]}
-                  innerRadius={60}
-                  outerRadius={90}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  <Cell fill="#22C55E" />
-                  <Cell fill="#3B82F6" />
-                  <Cell fill="#F59E0B" />
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-
+          <ResponsiveContainer width="100%" height={260}>
+            <BarChart data={barData}>
+              <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="value" fill="#065F46" radius={[6,6,0,0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
 
-      {/* 🔥 MAP */}
+        {/* 🔥 FIXED PIE CHART */}
+        <div className="card">
+          <div className="card-header">
+            <h3>Volunteer Status</h3>
+            <p>Current deployment overview</p>
+          </div>
+
+          <ResponsiveContainer width="100%" height={260}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                innerRadius={60}
+                outerRadius={90}
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+      </div>
+
       <div className="card map-box">
         <h3>Crisis Map</h3>
         <div style={{ height: "350px" }}>
@@ -174,10 +157,8 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* 🔥 LOWER */}
       <div className="bottom-row">
 
-        {/* AVAILABLE VOLUNTEERS */}
         <div className="card">
           <h3>Available Volunteers</h3>
 
@@ -202,15 +183,14 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        {/* RECENT ACTIVITY */}
         <div className="card">
           <h3>Recent Activity</h3>
 
           <div className="activity-list">
-             {activities.slice(0, 6).map((a, i) => (
+            {activities.slice(0, 6).map((a, i) => (
               <div key={i} className="activity-item">
 
-                <div className={`activity-icon ${a.type}`}>
+                <div className={activity-icon ${a.type}}>
                   {a.type === "volunteer" ? "👤" : "🚨"}
                 </div>
 
@@ -226,39 +206,32 @@ const DashboardPage = () => {
 
       </div>
 
-      {/* 🔥 PROBLEMS */}
       <div className="card">
-  <h3>Recent Problems</h3>
+        <h3>Recent Problems</h3>
 
-  <div className="problem-grid">
-    {problems// 🔥 limit 6
-      .map((p) => (
-        <div key={p._id} className="problem-card">
+        <div className="problem-grid">
+          {problems.map((p) => (
+            <div key={p._id} className="problem-card">
 
-          {/* icon */}
-          <div className="problem-icon">
-            🚨
-          </div>
+              <div className="problem-icon">🚨</div>
 
-          {/* info */}
-          <div>
-            <h4>{p.title}</h4>
-            <p>{p.priority}</p>
-            <small>📍 {p.location}</small>
-          </div>
+              <div>
+                <h4>{p.title}</h4>
+                <p>{p.priority}</p>
+                <small>📍 {p.location}</small>
+              </div>
 
+            </div>
+          ))}
         </div>
-      ))}
-  </div>
-</div>
+      </div>
 
     </div>
   );
 };
 
-/* 🔥 STAT CARD */
 const StatCard = ({ title, value, danger }) => (
-  <div className={`stat-box ${danger ? "danger" : ""}`}>
+  <div className={stat-box ${danger ? "danger" : ""}}>
     <p>{title}</p>
     <h2>{value}</h2>
   </div>
