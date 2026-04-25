@@ -6,9 +6,13 @@ const MapPage = () => {
   const [problems, setProblems] = useState([]);
   const [volunteers, setVolunteers] = useState([]);
 
+  // 🔥 LIVE STATE
+  const [liveEta, setLiveEta] = useState(null);
+  const [liveDistance, setLiveDistance] = useState(null);
+
   const location = useLocation();
   const route = location.state?.route || [];
-  const result = location.state?.result;   // 🔥 ADD THIS
+  const result = location.state?.result;
 
   useEffect(() => {
     fetch("http://localhost:5000/api/problem")
@@ -20,106 +24,128 @@ const MapPage = () => {
       .then(setVolunteers);
   }, []);
 
+  // 🔥 INIT LIVE VALUES
+  useEffect(() => {
+    if (result) {
+      const dist = parseFloat(result.distance);
+      const eta = parseFloat(result.eta);
+
+      setLiveDistance(dist);
+      setLiveEta(eta);
+    }
+  }, [result]);
+
+  // 🔥 LIVE DECREASING (SYNC FEEL)
+  useEffect(() => {
+    if (!liveEta || !liveDistance) return;
+
+    const interval = setInterval(() => {
+      setLiveEta(prev => (prev > 0 ? (prev - 1).toFixed(0) : 0));
+      setLiveDistance(prev => (prev > 0 ? (prev - 0.3).toFixed(2) : 0));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [liveEta]);
+
   return (
-  <div className="page-content">
-    <div className="page-card" style={{ padding: "20px" }}>
+    <div className="page-content">
+      <div className="page-card" style={{ padding: "20px" }}>
 
-      {/* 🔥 RESULT UI (YAHAN ADD KARNA HAI) */}
-      {result && (
-  <div style={{
-    marginBottom: "20px",
-    padding: "20px",
-    backgroundColor: "white",
-    borderRadius: "12px",
-    boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
-  }}>
-    <h3 style={{ color: '#064E3B', marginBottom: '20px' }}>
-      Match Result
-    </h3>
+        {/* 🔥 RESULT UI */}
+        {result && (
+          <div className="fade-in">
 
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: '20px',
-      marginBottom: '20px'
-    }}>
-      <div>
-        <h4 style={{ color: '#F44336' }}>Problem Details</h4>
-        <p><b>Title:</b> {result.problem}</p>
-        <p><b>Location:</b> {result.location}</p>
-        <p><b>Priority:</b> {result.priority}</p>
-      </div>
+            <h2 style={{
+              textAlign: "center",
+              color: "#064E3B",
+              marginBottom: "20px"
+            }}>
+              🚀 Match Result
+            </h2>
 
-      <div>
-        <h4 style={{ color: '#0F766E' }}>Assigned Volunteer</h4>
-        <p><b>Name:</b> {result.assignedVolunteer}</p>
-        <p><b>Skills:</b> {result.volunteerSkills?.join(", ")}</p>
-        <p><b>Rating:</b> ⭐ {result.volunteerRating}</p>
+            {/* 🔴 + 🟢 */}
+            <div className="grid-2">
+
+              <div className="card red slide-left">
+                <h4>🚨 Problem Details</h4>
+                <p>📌 <b>{result.problem}</b></p>
+                <p>📍 {result.location}</p>
+                <p>⚡ {result.priority}</p>
+              </div>
+
+              <div className="card green slide-right">
+                <h4>👤 Volunteer</h4>
+                <p><b>{result.assignedVolunteer}</b></p>
+                <p>🛠 {result.volunteerSkills?.join(", ")}</p>
+                <p>⭐ {result.volunteerRating}</p>
+              </div>
+
+            </div>
+
+            {/* ⭐ SCORE */}
+            <div className="score pulse">
+              ⭐ {result.score}/10 Match Score
+            </div>
+
+            {/* 📊 */}
+            <div className="mini-grid">
+              <MiniBox label="Skill" value={result.breakdown?.skill} />
+              <MiniBox label="Location" value={result.breakdown?.location} />
+              <MiniBox label="Priority" value={result.breakdown?.priority} />
+              <MiniBox label="Rating" value={result.breakdown?.rating} />
+              <MiniBox label="Availability" value={result.breakdown?.availability} />
+            </div>
+
+            {/* 🚑 LIVE ROUTE */}
+            <div className="route-live">
+              <RouteBox title="📍 Distance" value={`${liveDistance} km`} />
+              <RouteBox title="⏱ ETA" value={`${liveEta} mins`} />
+            </div>
+
+            {/* 🚑 LIVE TEXT */}
+            <p className="live-text">
+              🚑 Volunteer is moving in real-time...
+            </p>
+
+            <p className="status">
+              {result.status}
+            </p>
+
+            <p className="reason">
+              {result.reason}
+            </p>
+
+          </div>
+        )}
+
+        {/* 🗺 MAP */}
+        <div style={{ height: "500px" }}>
+          <MapView
+            problems={problems || []}
+            volunteers={volunteers || []}
+            route={route}
+          />
+        </div>
+
       </div>
     </div>
+  );
+};
 
-    <div style={{ marginBottom: '20px' }}>
-      <h4 style={{ color: '#064E3B' }}>
-        Match Score: {result.score}/10
-      </h4>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-        gap: '10px'
-      }}>
-        <p><b>Skill Match:</b> {result.breakdown?.skill}</p>
-        <p><b>Location Match:</b> {result.breakdown?.location}</p>
-        <p><b>Priority:</b> {result.breakdown?.priority}</p>
-        <p><b>Rating:</b> {result.breakdown?.rating}</p>
-        <p><b>Availability:</b> {result.breakdown?.availability}</p>
-      </div>
-    </div>
-
-    <div style={{ marginBottom: '20px' }}>
-      <h4 style={{ color: '#064E3B' }}>🗺 Route Information</h4>
-      <p><b>Distance:</b> {result.distance}</p>
-      <p><b>Estimated Time:</b> {result.eta}</p>
-    </div>
-
-    <p style={{
-      color: "blue",
-      fontWeight: "bold",
-      textAlign: "center"
-    }}>
-      🚑 Volunteer is moving in real-time...
-    </p>
-
-    <p style={{
-      color: "green",
-      fontWeight: "bold",
-      textAlign: "center"
-    }}>
-      {result.status}
-    </p>
-
-    <p style={{
-      fontStyle: "italic",
-      color: "#666",
-      textAlign: "center"
-    }}>
-      <b>Decision Reason:</b> {result.reason}
-    </p>
-  </div>
-)}
-
-      {/* 🗺 MAP */}
-      <div style={{ height: "500px" }}>
-        <MapView
-          problems={problems || []}
-          volunteers={volunteers || []}
-          route={route}
-        />
-      </div>
-
-    </div>
+// 🔹 COMPONENTS
+const MiniBox = ({ label, value }) => (
+  <div className="mini-box">
+    <p>{label}</p>
+    <b>{value}</b>
   </div>
 );
-};
+
+const RouteBox = ({ title, value }) => (
+  <div className="route-box">
+    <p>{title}</p>
+    <h3>{value}</h3>
+  </div>
+);
 
 export default MapPage;

@@ -2,13 +2,19 @@ import React from 'react';
 import ProblemList from '../components/ProblemList';
 
 const ProblemsPage = () => {
+
+  // 🔥 same image jo tu card me use kar raha hai (Medical Assistance)
+  const heroImage = "https://images.unsplash.com/photo-1551190822-a9333d879b1f?auto=format&fit=crop&w=1600&q=80";
+
   return (
     <>
       <div
         className="hero-banner"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=1600&q=80)',
-          minHeight: '75vh'
+          backgroundImage: `url(${heroImage})`,
+          height: '280px',                 // ✅ fixed height
+          backgroundSize: 'cover',
+          backgroundPosition: 'top center' // 🔥 bottom se cut
         }}
       >
         <div className="hero-content">
