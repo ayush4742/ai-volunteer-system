@@ -44,6 +44,11 @@ app.get("/", (req, res) => {
   res.send("Server is running 🚀");
 });
 
+// ✅ 🔥 NEW HEALTH ROUTE (ADDED ONLY THIS)
+app.get("/api/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 
 // 🔥 REAL-TIME TRACKING LOGIC
 io.on("connection", (socket) => {
