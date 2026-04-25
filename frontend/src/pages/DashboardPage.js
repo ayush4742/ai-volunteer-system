@@ -47,9 +47,9 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const dashboard = await fetch("http://localhost:5000/api/dashboard").then(res => res.json());
-        const p = await fetch("http://localhost:5000/api/problem").then(res => res.json());
-        const v = await fetch("http://localhost:5000/api/volunteer").then(res => res.json());
+        const dashboard = await fetch("https://ai-volunteer-system.onrender.com/api/dashboard").then(res => res.json());
+        const p = await fetch("https://ai-volunteer-system.onrender.com/api/problem").then(res => res.json());
+        const v = await fetch("https://ai-volunteer-system.onrender.com/api/volunteer").then(res => res.json());
 
         setData(dashboard);
         setProblems(p);

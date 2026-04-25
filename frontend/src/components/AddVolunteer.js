@@ -11,7 +11,7 @@ const AddVolunteer = ({ onAdd }) => {
   });
 
   const handleAdd = async () => {
-    await axios.post("http://localhost:5000/api/volunteer/register", {
+    await axios.post("https://ai-volunteer-system.onrender.com/api/volunteer/register", {
       ...data,
       skills: data.skills.split(",")
     });

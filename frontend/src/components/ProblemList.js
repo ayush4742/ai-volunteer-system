@@ -12,7 +12,7 @@ const ProblemList = ({ onMatch, solvedProblemId }) => {
 
   // 🔹 Fetch problems
   useEffect(() => {
-    axios.get("http://localhost:5000/api/problem")
+    axios.get("https://ai-volunteer-system.onrender.com/api/problem")
       .then(res => setProblems(res.data))
       .catch(err => console.log(err));
   }, []);
@@ -22,7 +22,7 @@ const ProblemList = ({ onMatch, solvedProblemId }) => {
     try {
       setLoadingId(id);
 
-      const res = await axios.post("http://localhost:5000/api/match", {
+      const res = await axios.post("https://ai-volunteer-system.onrender.com/api/match", {
         problemId: id
       });
 

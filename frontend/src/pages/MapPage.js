@@ -15,11 +15,11 @@ const MapPage = () => {
   const result = location.state?.result;
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/problem")
+    fetch("https://ai-volunteer-system.onrender.com/api/problem")
       .then(res => res.json())
       .then(setProblems);
 
-    fetch("http://localhost:5000/api/volunteer")
+    fetch("https://ai-volunteer-system.onrender.com/api/volunteer")
       .then(res => res.json())
       .then(setVolunteers);
   }, []);

@@ -9,7 +9,7 @@ const AddProblem = ({ onAdd }) => {
   });
 
   const handleAdd = async () => {
-    await axios.post("http://localhost:5000/api/problem/add", data);
+    await axios.post("https://ai-volunteer-system.onrender.com/api/problem/add", data);
     alert("Problem Added Successfully!");
     setData({ title: "", location: "", priority: "high" });
     if (onAdd) onAdd();

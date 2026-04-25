@@ -8,7 +8,7 @@ const Prediction = () => {
   const handlePredict = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/predict");
+      const res = await axios.get("https://ai-volunteer-system.onrender.com/api/predict");
       setData(res.data.predictions);
     } catch (err) {
       console.log("Prediction error:", err);

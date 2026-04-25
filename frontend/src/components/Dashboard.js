@@ -6,7 +6,7 @@ const Dashboard = () => {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/dashboard")
+    axios.get("https://ai-volunteer-system.onrender.com/api/dashboard")
       .then(res => setData(res.data))
       .catch(err => console.log("Dashboard error:", err));
   }, []);
