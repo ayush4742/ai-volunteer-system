@@ -11,21 +11,37 @@ const COLORS = ["#22c55e", "#f59e0b", "#ef4444"];
 
 const Prediction = () => {
 
-  // 🔥 DYNAMIC DATA STATE
-  const [data, setData] = useState([]);
-  const [pieData, setPieData] = useState([]);
-  const [heatmapData, setHeatmapData] = useState([]);
+  // ✅ INITIAL DATA (IMPORTANT FIX)
+  const [data, setData] = useState([
+    { name: "Week 1", risk: 45 },
+    { name: "Week 2", risk: 60 },
+    { name: "Week 3", risk: 70 },
+    { name: "Week 4", risk: 65 },
+    { name: "Week 5", risk: 85 }
+  ]);
+
+  const [pieData, setPieData] = useState([
+    { name: "Low", value: 30 },
+    { name: "Medium", value: 45 },
+    { name: "High", value: 25 }
+  ]);
+
+  const [heatmapData, setHeatmapData] = useState([
+    { area: "Delhi", risk: 85 },
+    { area: "Mumbai", risk: 70 },
+    { area: "Chennai", risk: 60 },
+    { area: "Assam", risk: 80 }
+  ]);
+
   const [eta, setEta] = useState(30);
   const [distance, setDistance] = useState(18);
 
-  // 🔥 RANDOM GENERATOR
   const random = (min, max) => Math.floor(Math.random() * (max - min) + min);
 
-  // 🔥 AUTO UPDATE EVERY 2 SEC
+  // 🔥 AUTO UPDATE (2 sec)
   useEffect(() => {
     const interval = setInterval(() => {
 
-      // 📈 LINE + BAR
       setData([
         { name: "Week 1", risk: random(30, 60) },
         { name: "Week 2", risk: random(40, 70) },
@@ -34,14 +50,12 @@ const Prediction = () => {
         { name: "Week 5", risk: random(60, 95) }
       ]);
 
-      // 🧁 PIE
       setPieData([
         { name: "Low", value: random(20, 40) },
         { name: "Medium", value: random(30, 50) },
         { name: "High", value: random(20, 40) }
       ]);
 
-      // 🔥 HEATMAP
       setHeatmapData([
         { area: "Delhi", risk: random(70, 100) },
         { area: "Mumbai", risk: random(50, 90) },
@@ -49,7 +63,6 @@ const Prediction = () => {
         { area: "Assam", risk: random(60, 95) }
       ]);
 
-      // 🚑 LIVE TRACKING
       setEta(prev => (prev > 0 ? prev - 1 : random(20, 40)));
       setDistance(prev => (prev > 0 ? (prev - 0.5).toFixed(2) : random(10, 25)));
 
@@ -58,7 +71,6 @@ const Prediction = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // 🤖 AI SCORE
   const calculateRisk = () => random(40, 95);
 
   return (
@@ -72,7 +84,7 @@ const Prediction = () => {
         <Stat title="Avg Response Time" value={`${random(20, 40)} min`} color="#2563eb" />
       </div>
 
-      {/* 🔥 MAIN DASHBOARD */}
+      {/* 🔥 DASHBOARD */}
       <div className="dashboard">
 
         {/* 📈 LINE */}
@@ -112,8 +124,8 @@ const Prediction = () => {
           <h3>📊 Area Risk</h3>
           <ResponsiveContainer width="100%" height={160}>
             <BarChart data={data}>
-              <XAxis dataKey="name" label={{ value: "Time", position: "insideBottom" }} />
-              <YAxis label={{ value: "Risk %", angle: -90 }} />
+              <XAxis dataKey="name" />
+              <YAxis />
               <Tooltip />
               <Legend />
               <Bar dataKey="risk" fill="#22c55e" name="Risk %" />
@@ -142,14 +154,12 @@ const Prediction = () => {
       {/* 🔥 SECOND SECTION */}
       <div className="grid" style={{ marginTop: "20px" }}>
 
-        {/* 🤖 AI SCORE */}
         <div className="card big-card">
           <h3>🤖 AI Risk Score</h3>
           <div className="risk-circle">{calculateRisk()}</div>
           <p>Real-time AI prediction</p>
         </div>
 
-        {/* 🚑 TRACKING */}
         <div className="card">
           <h3>🚑 Live Tracking</h3>
 
@@ -164,7 +174,6 @@ const Prediction = () => {
           </div>
         </div>
 
-        {/* 🔥 HEATMAP */}
         <div className="card" style={{ gridColumn: "span 2" }}>
           <h3>🔥 Risk Heatmap</h3>
 
@@ -195,7 +204,6 @@ const Prediction = () => {
   );
 };
 
-// 🔹 COMPONENTS
 const Stat = ({ title, value, color }) => (
   <div className="card stat">
     <p>{title}</p>
