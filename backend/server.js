@@ -24,8 +24,10 @@ const io = new Server(server, {
   },
 });
 
+// 🔥 CONNECT DATABASE
 connectDB();
 
+// 🔥 MIDDLEWARES
 app.use(cors());
 app.use(express.json());
 
@@ -37,6 +39,7 @@ app.use("/api/bulk", bulkRoutes);
 app.use("/api/predict", predictionRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
+// 🔹 TEST ROUTE
 app.get("/", (req, res) => {
   res.send("Server is running 🚀");
 });
@@ -67,9 +70,12 @@ io.on("connection", (socket) => {
   });
 });
 
+
+// ✅ IMPORTANT (FOR RENDER / DEPLOY)
 const PORT = process.env.PORT || 5000;
+
 
 // ❗ IMPORTANT: use server.listen NOT app.listen
 server.listen(PORT, () => {
-  console.log(`🚀 Server running at: http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
