@@ -23,10 +23,10 @@ const DashboardPage = () => {
     const diff = Math.floor((new Date() - new Date(date)) / 60000);
 
     if (diff < 1) return "Just now";
-    if (diff < 60) return ${diff} mins ago;
+    if (diff < 60) return `${diff} mins ago`;
 
     const hours = Math.floor(diff / 60);
-    return ${hours} hrs ago;
+    return `${hours} hrs ago`;
   };
 
   useEffect(() => {
@@ -56,13 +56,13 @@ const DashboardPage = () => {
 
         const problemActivities = p.map(item => ({
           type: "problem",
-          text: 🚨 Problem reported: ${item.title},
+          text: `🚨 Problem reported: ${item.title}`,
           time: getTimeAgo(item.createdAt || new Date())
         }));
 
         const volunteerActivities = v.map(item => ({
           type: "volunteer",
-          text: 👤 New volunteer: ${item.name},
+          text: `👤 New volunteer: ${item.name}`,
           time: getTimeAgo(item.createdAt || new Date())
         }));
 
@@ -76,7 +76,6 @@ const DashboardPage = () => {
     fetchData();
   }, []);
 
-  // ✅ NOW USED
   const barData = [
     { name: "Volunteers", value: data.totalVolunteers },
     { name: "Problems", value: data.totalProblems }
@@ -101,7 +100,7 @@ const DashboardPage = () => {
 
       <div className="charts-row">
 
-        {/* 🔥 FIXED BAR CHART */}
+        {/* BAR CHART */}
         <div className="card">
           <div className="card-header">
             <h3>Problem Analysis</h3>
@@ -119,7 +118,7 @@ const DashboardPage = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* 🔥 FIXED PIE CHART */}
+        {/* PIE CHART */}
         <div className="card">
           <div className="card-header">
             <h3>Volunteer Status</h3>
@@ -190,7 +189,7 @@ const DashboardPage = () => {
             {activities.slice(0, 6).map((a, i) => (
               <div key={i} className="activity-item">
 
-                <div className={activity-icon ${a.type}}>
+                <div className={`activity-icon ${a.type}`}>
                   {a.type === "volunteer" ? "👤" : "🚨"}
                 </div>
 
@@ -231,7 +230,7 @@ const DashboardPage = () => {
 };
 
 const StatCard = ({ title, value, danger }) => (
-  <div className={stat-box ${danger ? "danger" : ""}}>
+  <div className={`stat-box ${danger ? "danger" : ""}`}>
     <p>{title}</p>
     <h2>{value}</h2>
   </div>
