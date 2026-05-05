@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false); // ✅ added
 
   const navItems = [
     { path: '/', label: 'Home' },
@@ -30,6 +31,8 @@ const Navbar = () => {
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
+
+        {/* Logo */}
         <Link to="/" style={{
           color: 'white',
           textDecoration: 'none',
@@ -39,7 +42,28 @@ const Navbar = () => {
         }}>
           AI Crisis Management
         </Link>
-        <div style={{ display: 'flex', gap: '20px' }}>
+
+        {/* Hamburger Icon */}
+        <div
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="menu-icon"
+          style={{
+            fontSize: '26px',
+            cursor: 'pointer',
+            color: 'white'
+          }}
+        >
+          ☰
+        </div>
+
+        {/* Nav Links */}
+        <div
+          className={menuOpen ? "nav-links active" : "nav-links"}
+          style={{
+            display: 'flex',
+            gap: '20px'
+          }}
+        >
           {navItems.map((item) => (
             <Link
               key={item.path}
@@ -53,6 +77,7 @@ const Navbar = () => {
                 backgroundColor: location.pathname === item.path ? '#5EEAD4' : 'transparent',
                 fontFamily: 'Times New Roman, serif'
               }}
+              onClick={() => setMenuOpen(false)} // ✅ auto close on click
               onMouseOver={(e) => {
                 if (location.pathname !== item.path) {
                   e.target.style.backgroundColor = '#0F766E';
@@ -68,6 +93,7 @@ const Navbar = () => {
             </Link>
           ))}
         </div>
+
       </div>
     </nav>
   );
