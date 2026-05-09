@@ -231,22 +231,12 @@ Live Updates to Frontend
 
 ---
 
-## 👨‍💻 Author
-
-**Ayush 🚀**
-Built with passion for **Google Solution Challenge 2026**
-
----
-
-## ⭐ Support & Contribution
-
-If you like this project:
-
-* ⭐ Star the repository
-* 🍴 Fork it
-* 🤝 Contribute
+## Team 
+Ayush Kumar - https://github.com/ayush4742
+Umme Salma - https://github.com/Ignis-Core
 
 ---
+
 
 ## 💬 Final Note
 
